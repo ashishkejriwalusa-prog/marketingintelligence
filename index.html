@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScaleWise Competitor Intelligence Repository</title>
+  <meta name="description" content="ScaleWise competitor marketing intelligence repository for KPO, offshore accounting and outsourcing firms." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SW</div>
+        <div>
+          <div class="brand-name">ScaleWise</div>
+          <div class="brand-subtitle">Competitor Intel</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-link active" data-view="dashboard">Dashboard</button>
+        <button class="nav-link" data-view="competitors">Competitors</button>
+        <button class="nav-link" data-view="evidence">Evidence Repository</button>
+        <button class="nav-link" data-view="scorecard">Scorecard</button>
+        <button class="nav-link" data-view="actions">ScaleWise Actions</button>
+        <button class="nav-link" data-view="report">Report Builder</button>
+        <button class="nav-link" data-view="playbook">Research Playbook</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="exportJson" class="secondary full">Export JSON</button>
+        <label class="secondary full import-label">Import JSON<input id="importJson" type="file" accept="application/json" /></label>
+        <button id="resetDemo" class="ghost full">Reset Demo Data</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubTitle">Reverse-engineer offshore/KPO competitor marketing strategies and convert them into ScaleWise actions.</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="quickAddCompetitor" class="primary">+ Add Competitor</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active-view">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">Competitive Marketing Intelligence Engine</p>
+            <h2>Track competitors from website history to sales funnel.</h2>
+            <p>Built for KPO, CPA outsourcing, offshore accounting, BPO, bookkeeping, tax, payroll, and finance operations firms.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="primary" data-open-view="competitors">Start Research</button>
+            <button class="secondary" data-open-view="report">Build Report</button>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric-card"><span id="metricCompetitors">0</span><label>Competitors</label></div>
+          <div class="metric-card"><span id="metricEvidence">0</span><label>Evidence Items</label></div>
+          <div class="metric-card"><span id="metricActions">0</span><label>Open Actions</label></div>
+          <div class="metric-card"><span id="metricThreats">0</span><label>High Threats</label></div>
+        </div>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header"><h3>Competitor Snapshot</h3><button class="small secondary" data-open-view="competitors">View All</button></div>
+            <div id="dashboardCompetitors" class="list-stack"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3>Priority ScaleWise Actions</h3><button class="small secondary" data-open-view="actions">View Board</button></div>
+            <div id="dashboardActions" class="list-stack"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="competitors" class="view">
+        <div class="panel">
+          <div class="panel-header">
+            <div><h3>Add / Edit Competitor</h3><p>Use this as the starting point for each research report.</p></div>
+          </div>
+          <form id="competitorForm" class="grid-form">
+            <input type="hidden" id="competitorId" />
+            <label>Company Name<input id="companyName" required placeholder="Entigrity" /></label>
+            <label>Website<input id="website" required placeholder="https://www.entigrity.com" /></label>
+            <label>Industry<select id="industry"><option>Offshore Accounting</option><option>KPO</option><option>BPO</option><option>CPA Outsourcing</option><option>Bookkeeping</option><option>Tax Outsourcing</option><option>Finance Operations</option><option>Other</option></select></label>
+            <label>Target Geography<input id="targetGeo" placeholder="USA, UK, Australia" /></label>
+            <label>Primary Market<input id="primaryMarket" placeholder="CPA firms, SMBs, enterprises" /></label>
+            <label>Priority<select id="priority"><option>High</option><option>Medium</option><option>Low</option></select></label>
+            <label>Threat Level<select id="threatLevel"><option>High</option><option>Medium</option><option>Low</option><option>Unknown</option></select></label>
+            <label>Status<select id="status"><option>Not Started</option><option>In Progress</option><option>Complete</option></select></label>
+            <label class="wide">Main Question<textarea id="mainQuestion" rows="2" placeholder="How did they build their CPA outsourcing marketing strategy from inception?"></textarea></label>
+            <div class="form-actions wide"><button class="primary" type="submit">Save Competitor</button><button type="button" id="clearCompetitorForm" class="secondary">Clear</button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>Competitor List</h3><input id="competitorSearch" class="search" placeholder="Search competitors..." /></div>
+          <div id="competitorTable" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="evidence" class="view">
+        <div class="panel">
+          <div class="panel-header"><div><h3>Evidence Repository</h3><p>Capture confirmed facts, source links, strategic signals, and ScaleWise relevance.</p></div></div>
+          <form id="evidenceForm" class="grid-form">
+            <input type="hidden" id="evidenceId" />
+            <label>Competitor<select id="evidenceCompetitor"></select></label>
+            <label>Source Type<select id="sourceType"><option>Website</option><option>Archive</option><option>LinkedIn</option><option>YouTube</option><option>News / PR</option><option>Jobs</option><option>SEO</option><option>Review Site</option><option>Other</option></select></label>
+            <label>Source URL<input id="sourceUrl" placeholder="https://..." /></label>
+            <label>Source Date<input id="sourceDate" type="date" /></label>
+            <label>Confidence<select id="confidence"><option>High</option><option>Medium</option><option>Low</option></select></label>
+            <label>Funnel Stage<select id="funnelStage"><option>Awareness</option><option>Interest</option><option>Consideration</option><option>Conversion</option><option>Retention</option><option>Unknown</option></select></label>
+            <label>ScaleWise Relevance<select id="relevance"><option>Copy</option><option>Improve</option><option>Avoid</option><option>Monitor</option></select></label>
+            <label>Strategy Tag<select id="strategyTag"><option>Positioning</option><option>Service Evolution</option><option>Buyer Segment</option><option>SEO</option><option>LinkedIn</option><option>Video</option><option>PR</option><option>Hiring</option><option>Sales Funnel</option><option>Trust Signal</option><option>Partnership</option><option>Pricing</option><option>Technology</option><option>Offshore Delivery</option></select></label>
+            <label class="wide">Evidence Summary<textarea id="evidenceSummary" rows="3" required placeholder="What does the source confirm?"></textarea></label>
+            <label class="wide">Strategic Signal<textarea id="strategicSignal" rows="2" placeholder="What does this suggest about their marketing strategy?"></textarea></label>
+            <label class="wide">ScaleWise Action<textarea id="scaleWiseAction" rows="2" placeholder="What should ScaleWise copy, improve, avoid, or monitor?"></textarea></label>
+            <div class="form-actions wide"><button class="primary" type="submit">Save Evidence</button><button type="button" id="clearEvidenceForm" class="secondary">Clear</button><button type="button" id="exportEvidenceCsv" class="secondary">Export CSV</button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>Evidence Items</h3><input id="evidenceSearch" class="search" placeholder="Search evidence..." /></div>
+          <div id="evidenceTable" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="scorecard" class="view">
+        <div class="panel">
+          <div class="panel-header"><div><h3>Marketing Maturity Scorecard</h3><p>Score each competitor out of 10 by channel and strategic maturity.</p></div></div>
+          <form id="scoreForm" class="grid-form score-grid">
+            <input type="hidden" id="scoreId" />
+            <label>Competitor<select id="scoreCompetitor"></select></label>
+            <label>Website Positioning<input id="websiteScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Service Clarity<input id="serviceScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Niche Focus<input id="nicheScore" type="number" min="0" max="10" value="0" /></label>
+            <label>SEO Strength<input id="seoScore" type="number" min="0" max="10" value="0" /></label>
+            <label>LinkedIn Authority<input id="linkedinScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Founder Branding<input id="founderScore" type="number" min="0" max="10" value="0" /></label>
+            <label>YouTube / Video<input id="videoScore" type="number" min="0" max="10" value="0" /></label>
+            <label>PR Credibility<input id="prScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Lead Funnel<input id="funnelScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Trust Signals<input id="trustScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Sales Maturity<input id="salesScore" type="number" min="0" max="10" value="0" /></label>
+            <label>Differentiation<input id="diffScore" type="number" min="0" max="10" value="0" /></label>
+            <label class="wide">Best Thing to Copy<textarea id="bestCopy" rows="2"></textarea></label>
+            <label class="wide">Biggest Weakness to Exploit<textarea id="weaknessExploit" rows="2"></textarea></label>
+            <div class="form-actions wide"><button class="primary" type="submit">Save Scorecard</button><button type="button" id="clearScoreForm" class="secondary">Clear</button></div>
+          </form>
+        </div>
+        <div class="panel"><div class="panel-header"><h3>Scorecards</h3></div><div id="scoreTable" class="table-wrap"></div></div>
+      </section>
+
+      <section id="actions" class="view">
+        <div class="panel">
+          <div class="panel-header"><div><h3>ScaleWise Action Board</h3><p>Convert competitor intelligence into practical website, SEO, LinkedIn, sales, and PR actions.</p></div></div>
+          <form id="actionForm" class="grid-form">
+            <input type="hidden" id="actionId" />
+            <label>Source Competitor<select id="actionCompetitor"></select></label>
+            <label>Category<select id="actionCategory"><option>Website</option><option>SEO</option><option>LinkedIn</option><option>YouTube</option><option>Sales</option><option>PR</option><option>Lead Magnet</option><option>Partnership</option><option>Operations</option></select></label>
+            <label>Priority<select id="actionPriority"><option>High</option><option>Medium</option><option>Low</option></select></label>
+            <label>Status<select id="actionStatus"><option>Not Started</option><option>In Progress</option><option>Done</option></select></label>
+            <label>Due Date<input id="dueDate" type="date" /></label>
+            <label>Owner<input id="owner" placeholder="Ashish / ScaleWise" /></label>
+            <label class="wide">Action<textarea id="actionText" rows="3" required placeholder="Build a CPA tax-season outsourcing landing page targeting managing partners."></textarea></label>
+            <label class="wide">Expected Impact<textarea id="expectedImpact" rows="2" placeholder="Why this matters for ScaleWise growth."></textarea></label>
+            <div class="form-actions wide"><button class="primary" type="submit">Save Action</button><button type="button" id="clearActionForm" class="secondary">Clear</button></div>
+          </form>
+        </div>
+        <div class="kanban" id="kanbanBoard"></div>
+      </section>
+
+      <section id="report" class="view">
+        <div class="panel">
+          <div class="panel-header"><div><h3>Report Builder</h3><p>Generate a structured competitor report draft from stored evidence, scorecard, and actions.</p></div></div>
+          <div class="report-controls">
+            <select id="reportCompetitor"></select>
+            <button id="generateReport" class="primary">Generate Report</button>
+            <button id="copyReport" class="secondary">Copy Report</button>
+            <button id="downloadReport" class="secondary">Download Markdown</button>
+          </div>
+          <textarea id="reportOutput" class="report-output" placeholder="Your report will appear here..."></textarea>
+        </div>
+        <div class="two-col">
+          <div class="panel"><h3>Master Research Prompt</h3><pre id="masterPrompt" class="prompt-box"></pre><button id="copyPrompt" class="secondary">Copy Prompt</button></div>
+          <div class="panel"><h3>Source Checklist</h3><div id="sourceChecklist" class="checklist"></div></div>
+        </div>
+      </section>
+
+      <section id="playbook" class="view">
+        <div class="panel playbook">
+          <h3>Research Playbook</h3>
+          <div class="playbook-grid">
+            <article><span>01</span><h4>Identity Check</h4><p>Company, website, headquarters, founded year, leadership, services, markets, delivery locations.</p></article>
+            <article><span>02</span><h4>Website Crawl</h4><p>Homepage, about, services, industries, blog, resources, case studies, contact, careers.</p></article>
+            <article><span>03</span><h4>Archive Review</h4><p>Compare old headlines, service menus, CTAs, audience focus, pricing claims, and brand maturity.</p></article>
+            <article><span>04</span><h4>SEO Search</h4><p>Find indexed service pages, keyword clusters, blogs, guides, webinars, comparison pages, and lead magnets.</p></article>
+            <article><span>05</span><h4>LinkedIn Review</h4><p>Analyze company posts, founder content, hiring, webinars, events, comments, and sales team visibility.</p></article>
+            <article><span>06</span><h4>YouTube Review</h4><p>Check webinars, explainers, founder interviews, testimonials, shorts, CTAs, and video frequency.</p></article>
+            <article><span>07</span><h4>PR and Hiring Signals</h4><p>Capture awards, partnerships, funding, expansion, events, and roles that reveal market priorities.</p></article>
+            <article><span>08</span><h4>ScaleWise Translation</h4><p>Convert evidence into copy, improve, avoid, and 90-day action items.</p></article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
